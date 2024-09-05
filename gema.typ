@@ -65,12 +65,12 @@ $f(t) = min {
     Assign("gema", [prices[0]])
     Assign("multiplier", $"smoothing" / ("period" + 1)$)
     For(cond: "price in prices[1:]", {
-      If(cond: $"price" < "gema"[-1]$, {
-        Call("gema.append", "price")
-      })
-      Else({
+      If(cond: $"price" >= "gema"[-1]$, {
         Assign("new_gema", $("price" - "gema"[-1]) dot "multiplier" + "gema"[-1]$)
         Call("gema.append", "new_gema")
+      })
+      Else({
+        Call("gema.append", "price")
       })
     })
     Return("gema")
