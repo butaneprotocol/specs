@@ -48,47 +48,41 @@ The GEMA algorithm uses a single piece of previous state to add a drag for price
 This graph demonstrates how the GEMA (red line) closely follows the asset price (blue line) during downward movements, while providing a smoother trend during upward movements.
 
 === Algorithm
-#figure(
 $f(t) = min {
   gamma dot f(t-1) + (1-gamma) x_t,
   x_t
-}$,
-caption: "GEMA Algorithm"
-)
+}$
 
-=== Pseudocode
-#figure(
-  align(left)[
-    #set text(font: "New Computer Modern Mono")
-    #set par(leading: 0.65em)
-    #let prices = [...price values]
+==== Pseudocode
+#align(left)[
+  #set text(font: "New Computer Modern Mono")
+  #set par(leading: 0.65em)
+  #let prices = [...price values]
 
-    #table(
-      columns: (auto, auto),
-      inset: 0pt,
-      stroke: none,
-      align: left + horizon,
-      [*Input:*], [prices, period],
-      [*Output:*], [gema],
-    )
+  #table(
+    columns: (auto, auto),
+    inset: 0pt,
+    stroke: none,
+    align: left + horizon,
+    [*Input:*], [prices, period],
+    [*Output:*], [gema],
+  )
 
-    #v(0.5em)
-    $"gema" arrow.l [prices[0]]$\
-    $"multiplier" arrow.l 2 / ("period" + 1)$\
-    #v(0.5em)
-    *for* $"price"$ *in* $"prices"[1:]$ *do*\
-      #h(1em) *if* $"price" < "gema"[-1]$ *then*\
-        #h(2em) $"gema"."append"("price")$\
-      #h(1em) *else*\
-        #h(2em) $"new_gema" arrow.l ("price" - "gema"[-1]) dot "multiplier" + "gema"[-1]$\
-        #h(2em) $"gema"."append"("new_gema")$\
-      #h(1em) *end if*\
-    *end for*
-    #v(0.5em)
-    *return* $"gema"$
-  ],
-  caption: "GEMA Algorithm"
-)
+  #v(0.5em)
+  $"gema" arrow.l [prices[0]]$\
+  $"multiplier" arrow.l 2 / ("period" + 1)$\
+  #v(0.5em)
+  *for* $"price"$ *in* $"prices"[1:]$ *do*\
+    #h(1em) *if* $"price" < "gema"[-1]$ *then*\
+      #h(2em) $"gema"."append"("price")$\
+    #h(1em) *else*\
+      #h(2em) $"new_gema" arrow.l ("price" - "gema"[-1]) dot "multiplier" + "gema"[-1]$\
+      #h(2em) $"gema"."append"("new_gema")$\
+    #h(1em) *end if*\
+  *end for*
+  #v(0.5em)
+  *return* $"gema"$
+]
 
 == Notes
 1. The algorithm initializes the GEMA with the first price in the series.
