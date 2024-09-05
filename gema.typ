@@ -1,3 +1,5 @@
+#import "@preview/algorithmic:0.1.0": *
+
 #let special_version = read("./version.txt")
 #align(center, [
     #v(2em)
@@ -54,35 +56,27 @@ $f(t) = min {
 }$
 
 ==== Pseudocode
-#align(left)[
-  #set text(font: "New Computer Modern Mono")
-  #set par(leading: 0.65em)
-  #let prices = [...price values]
+#import "@preview/algorithmic:0.1.0"
+#import algorithmic: algorithm
 
-  #table(
-    columns: (auto, auto),
-    inset: 0pt,
-    stroke: none,
-    align: left + horizon,
-    [*Input:*], [prices, period],
-    [*Output:*], [gema],
-  )
-
-  #v(0.5em)
-  $"gema" arrow.l [prices[0]]$\
-  $"multiplier" arrow.l 2 / ("period" + 1)$\
-  #v(0.5em)
-  *for* $"price"$ *in* $"prices"[1:]$ *do*\
-    #h(1em) *if* $"price" < "gema"[-1]$ *then*\
-      #h(2em) $"gema"."append"("price")$\
-    #h(1em) *else*\
-      #h(2em) $"new_gema" arrow.l ("price" - "gema"[-1]) dot "multiplier" + "gema"[-1]$\
-      #h(2em) $"gema"."append"("new_gema")$\
-    #h(1em) *end if*\
-  *end for*
-  #v(0.5em)
-  *return* $"gema"$
-]
+#algorithm({
+  import algorithmic: *
+  Function("CalculateGEMA", args: ("prices", "period"), {
+    Assign("period", "20")
+    Assign("gema", [prices[0]])
+    Assign("multiplier", $2 / ("period" + 1)$)
+    For(cond: "price in prices[1:]", {
+      If(cond: $"price" < "gema"[-1]$, {
+        Call("gema.append", "price")
+      })
+      Else({
+        Assign("new_gema", $("price" - "gema"[-1]) dot "multiplier" + "gema"[-1]$)
+        Call("gema.append", "new_gema")
+      })
+    })
+    Return("gema")
+  })
+})
 
 == Notes
 1. The algorithm initializes the GEMA with the first price in the series.
