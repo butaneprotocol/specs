@@ -53,7 +53,7 @@ jobs:
           tag_name: ${{ github.ref_name }}
           files: "./*.pdf"
 
-      - run: "mkdir output && mv ema.pdf output/ema.pdf"
+      - run: "mkdir output && mv gema.pdf output/gema.pdf"
 
       - name: Publish
         uses: ryand56/r2-upload-action@latest
