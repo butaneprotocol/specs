@@ -1,0 +1,1 @@
+typst c spec.typ
