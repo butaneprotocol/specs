@@ -51,27 +51,38 @@ This visual representation demonstrates how the Simple EMA (red line) closely fo
 
 
 === Pseudocode
+#figure(
+  align(left)[
+    #set text(font: "New Computer Modern Mono")
+    #set par(leading: 0.65em)
+    #let prices = [...price values]
 
-#figure([
-  #set text(font: "New Computer Modern Mono")
+    #table(
+      columns: (auto, auto),
+      inset: 0pt,
+      stroke: none,
+      align: left + horizon,
+      [*Input:*], [prices, period],
+      [*Output:*], [ema],
+    )
 
-  *Input:* prices, period \
-  *Output:* ema
-
-  ema \<\- [prices[0]] \
-  multiplier \<\- 2 / (period + 1)
-
-  *for* price *in* prices[1:] \
-  #h(20pt)*if* price < ema[-1] \
-  #h(40pt)ema.append(price) \
-  #h(20pt)*else* \
-  #h(40pt)new_ema \<\- (price - ema[-1]) \* multiplier + ema[-1] \
-  #h(40pt)ema.append(new_ema) \
-  #h(20pt)*end if* \
-  *end for*
-
-  *return* ema
-], caption: "Simple EMA Algorithm")
+    #v(0.5em)
+    $"ema" arrow.l [prices[0]]$\
+    $"multiplier" arrow.l 2 / ("period" + 1)$\
+    #v(0.5em)
+    *for* $"price"$ *in* $"prices"[1:]$ *do*\
+      #h(1em) *if* $"price" < "ema"[-1]$ *then*\
+        #h(2em) $"ema"."append"("price")$\
+      #h(1em) *else*\
+        #h(2em) $"new_ema" arrow.l ("price" - "ema"[-1]) dot "multiplier" + "ema"[-1]$\
+        #h(2em) $"ema"."append"("new_ema")$\
+      #h(1em) *end if*\
+    *end for*
+    #v(0.5em)
+    *return* $"ema"$
+  ],
+  caption: "Simple EMA Algorithm"
+)
 
 == Notes
 1. The algorithm initializes the EMA with the first price in the series.
