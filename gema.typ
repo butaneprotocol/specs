@@ -61,10 +61,9 @@ $f(t) = min {
 
 #algorithm({
   import algorithmic: *
-  Function("CalculateGEMA", args: ("prices", "period"), {
-    Assign("period", "20")
+  Function("CalculateGEMA", args: ("prices", "period", "smoothing"), {
     Assign("gema", [prices[0]])
-    Assign("multiplier", $2 / ("period" + 1)$)
+    Assign("multiplier", $"smoothing" / ("period" + 1)$)
     For(cond: "price in prices[1:]", {
       If(cond: $"price" < "gema"[-1]$, {
         Call("gema.append", "price")
