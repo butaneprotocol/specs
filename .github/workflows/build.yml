@@ -1,0 +1,66 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    tags: ["v*.*.*"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🧰 Download Typst
+        uses: robinraju/release-downloader@v1.7
+        with:
+          repository: typst/typst
+          tag: v0.10.0
+          fileName: typst-x86_64-apple-darwin.tar.xz
+
+      - name: 🧰 Extract Typst
+        shell: bash
+        run: |
+          sudo mkdir /usr/local/typst
+          sudo tar -xzf typst-x86_64-apple-darwin.tar.xz -C /usr/local/typst/
+          rm -f typst-x86_64-apple-darwin.tar.xz
+          echo "/usr/local/typst/typst-x86_64-apple-darwin" >> $GITHUB_PATH
+
+      - run: "echo $GITHUB_SHA > ./version.txt"
+
+      - name: 📘 Compile
+        shell: bash
+        run: ./build.sh
+
+      - name: 📦 Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: oracle_spec
+          path: ./*.pdf
+
+      - name: 🚀 Release
+        uses: softprops/action-gh-release@v1
+        if: github.ref_type == 'tag'
+        with:
+          name: ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          files: "./*.pdf"
+
+      - run: "mkdir output && mv spec.pdf output/spec.pdf"
+
+      - name: Publish
+        uses: ryand56/r2-upload-action@latest
+        with:
+          r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
+          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          r2-bucket: ${{ secrets.R2_BUCKET }}
+          source-dir: output
+          destination-dir: ./
