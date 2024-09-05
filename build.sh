@@ -1,1 +1,1 @@
-typst c spec.typ
+typst c ema.typ
