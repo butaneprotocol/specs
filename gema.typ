@@ -50,10 +50,16 @@ The GEMA algorithm uses a single piece of previous state to add a drag for price
 This graph demonstrates how the GEMA (red line) closely follows the asset price (blue line) during downward movements, while providing a smoother trend during upward movements.
 
 === Algorithm
-$f(t) = min {
-  gamma dot f(t-1) + (1-gamma) x_t,
-  x_t
-}$
+$x_t$ is the current price \
+$gamma = "smoothing" / ("period" + 1)$
+
+#align(center, [
+  $f(0) = x_0$ \
+  $f(t) = min {
+    gamma dot f(t-1) + (1-gamma) x_t,
+    x_t
+  }$
+])
 
 ==== Pseudocode
 #import "@preview/algorithmic:0.1.0"
